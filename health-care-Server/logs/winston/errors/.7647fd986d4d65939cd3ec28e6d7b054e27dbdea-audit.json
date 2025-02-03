@@ -1,0 +1,15 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 14
+    },
+    "auditLog": "E:\\web\\Level-2\\Frontend\\NextJS Ninja\\health-care-system\\health-care-server\\logs\\winston\\errors\\.7647fd986d4d65939cd3ec28e6d7b054e27dbdea-audit.json",
+    "files": [
+        {
+            "date": 1738604704376,
+            "name": "E:\\web\\Level-2\\Frontend\\NextJS Ninja\\health-care-system\\health-care-server\\logs\\winston\\errors\\phu-2025-03-02-23-error.log",
+            "hash": "4146709665059cdd9a5120748218e111fe1d46b2969f12a0e423378ff931aff9"
+        }
+    ],
+    "hashType": "sha256"
+}
