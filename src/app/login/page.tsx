@@ -14,7 +14,9 @@ import {
 } from '@mui/material';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 
 export type TLoginFormValues = {
   email: string;
@@ -22,6 +24,7 @@ export type TLoginFormValues = {
 };
 
 const LoginPage = () => {
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -30,11 +33,13 @@ const LoginPage = () => {
   } = useForm<TLoginFormValues>();
 
   const onSubmit: SubmitHandler<TLoginFormValues> = async (values) => {
-    console.log(values);
+    const toastId = toast.loading('User logging....!!');
     try {
       const res = await userLogin(values);
       if (res?.data?.accessToken) {
+        toast.success(res?.message, { id: toastId });
         storeUserInfo({ accessToken: res?.data?.accessToken });
+        router.push('/');
       }
     } catch (err: any) {
       console.log(err.message);
