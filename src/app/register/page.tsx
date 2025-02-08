@@ -11,36 +11,20 @@ import {
 import Image from 'next/image';
 import assets from '@/assets';
 import Link from 'next/link';
-import { useForm, SubmitHandler } from 'react-hook-form';
+import { FieldValues } from 'react-hook-form';
 import { modifyPayload } from '@/utils/modifyPayload';
 import { registerPatient } from '@/services/actions/registerPatient';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 import { storeUserInfo } from '@/services/auth.services';
 import { userLogin } from '@/services/actions/userLogin';
-
-type TPatientData = {
-  name: string;
-  email: string;
-  contactNumber: string;
-  address: string;
-};
-
-type TPatientRegisterFormData = {
-  password: string;
-  patient: TPatientData;
-};
+import HCForm from '@/components/Forms/HCForm';
+import HCInput from '@/components/Forms/HCInput';
 
 const RegisterPage = () => {
   const router = useRouter();
-  const {
-    register,
-    handleSubmit,
-    watch,
-    formState: { errors },
-  } = useForm<TPatientRegisterFormData>();
 
-  const onSubmit: SubmitHandler<TPatientRegisterFormData> = async (values) => {
+  const handleRegister = async (values: FieldValues) => {
     const toastId = toast.loading('Registering user...!!');
     const data = modifyPayload(values);
     try {
@@ -96,55 +80,50 @@ const RegisterPage = () => {
             </Box>
           </Stack>
           <Box>
-            <form onSubmit={handleSubmit(onSubmit)}>
+            <HCForm onSubmit={handleRegister}>
               <Grid container spacing={2} my={1}>
                 <Grid item md={12}>
-                  <TextField
+                  <HCInput
                     label='Name'
-                    variant='outlined'
-                    size='small'
                     fullWidth={true}
-                    {...register('patient.name')}
+                    name='patient.name'
+                    required={true}
                   />
                 </Grid>
                 <Grid item md={6}>
-                  <TextField
+                  <HCInput
                     label='Email'
-                    type='email'
-                    variant='outlined'
                     size='small'
                     fullWidth={true}
-                    {...register('patient.email')}
+                    name='patient.email'
+                    required={true}
                   />
                 </Grid>
                 <Grid item md={6}>
-                  <TextField
+                  <HCInput
                     label='Password'
                     type='password'
-                    variant='outlined'
-                    size='small'
                     fullWidth={true}
-                    {...register('password')}
+                    name='password'
+                    required={true}
                   />
                 </Grid>
                 <Grid item md={6}>
-                  <TextField
+                  <HCInput
                     label='Contact Number'
                     type='tel'
-                    variant='outlined'
-                    size='small'
                     fullWidth={true}
-                    {...register('patient.contactNumber')}
+                    name='patient.contactNumber'
+                    required={true}
                   />
                 </Grid>
                 <Grid item md={6}>
-                  <TextField
+                  <HCInput
                     label='Address'
                     type='text'
-                    variant='outlined'
-                    size='small'
                     fullWidth={true}
-                    {...register('patient.address')}
+                    name='patient.address'
+                    required={true}
                   />
                 </Grid>
               </Grid>
@@ -160,7 +139,7 @@ const RegisterPage = () => {
               <Typography component='p' fontWeight={300}>
                 Do you already have an account? <Link href='/login'>Login</Link>
               </Typography>
-            </form>
+            </HCForm>
           </Box>
         </Box>
       </Stack>
