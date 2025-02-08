@@ -2,17 +2,10 @@
 
 import assets from '@/assets';
 import HCForm from '@/components/Forms/HCForm';
+import HCInput from '@/components/Forms/HCInput';
 import { userLogin } from '@/services/actions/userLogin';
 import { storeUserInfo } from '@/services/auth.services';
-import {
-  Box,
-  Button,
-  Container,
-  Grid,
-  Stack,
-  TextField,
-  Typography,
-} from '@mui/material';
+import { Box, Button, Container, Grid, Stack, Typography } from '@mui/material';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -74,23 +67,19 @@ const LoginPage = () => {
             <HCForm onSubmit={handleLogin}>
               <Grid container spacing={2} my={1}>
                 <Grid item md={6}>
-                  <TextField
+                  <HCInput
+                    name='email'
                     label='Email'
                     type='email'
-                    variant='outlined'
-                    size='small'
                     fullWidth={true}
-                    {...register('email')}
                   />
                 </Grid>
                 <Grid item md={6}>
-                  <TextField
+                  <HCInput
+                    name='password'
                     label='Password'
                     type='password'
-                    variant='outlined'
-                    size='small'
                     fullWidth={true}
-                    {...register('password')}
                   />
                 </Grid>
               </Grid>
@@ -110,7 +99,7 @@ const LoginPage = () => {
                 Don&apos;t have an account?{' '}
                 <Link href='/register'>Create an account</Link>
               </Typography>
-            </HC>
+            </HCForm>
           </Box>
         </Box>
       </Stack>
