@@ -1,13 +1,5 @@
 'use client';
-import {
-  Box,
-  Button,
-  Container,
-  Grid,
-  Stack,
-  TextField,
-  Typography,
-} from '@mui/material';
+import { Box, Button, Container, Grid, Stack, Typography } from '@mui/material';
 import Image from 'next/image';
 import assets from '@/assets';
 import Link from 'next/link';
@@ -20,6 +12,32 @@ import { storeUserInfo } from '@/services/auth.services';
 import { userLogin } from '@/services/actions/userLogin';
 import HCForm from '@/components/Forms/HCForm';
 import HCInput from '@/components/Forms/HCInput';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+
+export const patientValidationSchema = z.object({
+  name: z.string().min(1, 'Please enter your name!'),
+  email: z.string().email('Please provide a valid email address!'),
+  contactNumber: z
+    .string()
+    .regex(/^\d{11}$/, 'Please provide a valid phone number!'),
+  address: z.string().min(1, 'Please enter your address'),
+});
+
+export const validationSchema = z.object({
+  password: z.string().min(6, 'Must be at least 6 characters'),
+  patient: patientValidationSchema,
+});
+
+export const defaultValues = {
+  password: '',
+  patient: {
+    name: '',
+    email: '',
+    contactNumber: '',
+    address: '',
+  },
+};
 
 const RegisterPage = () => {
   const router = useRouter();
@@ -80,15 +98,14 @@ const RegisterPage = () => {
             </Box>
           </Stack>
           <Box>
-            <HCForm onSubmit={handleRegister}>
+            <HCForm
+              onSubmit={handleRegister}
+              resolver={zodResolver(validationSchema)}
+              defaultValues={defaultValues}
+            >
               <Grid container spacing={2} my={1}>
                 <Grid item md={12}>
-                  <HCInput
-                    label='Name'
-                    fullWidth={true}
-                    name='patient.name'
-                    required={true}
-                  />
+                  <HCInput label='Name' fullWidth={true} name='patient.name' />
                 </Grid>
                 <Grid item md={6}>
                   <HCInput
@@ -96,7 +113,6 @@ const RegisterPage = () => {
                     size='small'
                     fullWidth={true}
                     name='patient.email'
-                    required={true}
                   />
                 </Grid>
                 <Grid item md={6}>
@@ -105,7 +121,6 @@ const RegisterPage = () => {
                     type='password'
                     fullWidth={true}
                     name='password'
-                    required={true}
                   />
                 </Grid>
                 <Grid item md={6}>
@@ -114,7 +129,6 @@ const RegisterPage = () => {
                     type='tel'
                     fullWidth={true}
                     name='patient.contactNumber'
-                    required={true}
                   />
                 </Grid>
                 <Grid item md={6}>
@@ -123,7 +137,6 @@ const RegisterPage = () => {
                     type='text'
                     fullWidth={true}
                     name='patient.address'
-                    required={true}
                   />
                 </Grid>
               </Grid>
