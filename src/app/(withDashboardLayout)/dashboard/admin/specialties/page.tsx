@@ -3,37 +3,49 @@
 import { Box, Button, IconButton, Stack, TextField } from '@mui/material';
 import { useState } from 'react';
 import SpecialtyModal from './component/SpecialtyModal';
-import { useGetAllSpecialtiesQuery } from '@/redux/api/specialties.Api';
+import {
+  useDeleteSpecialtyMutation,
+  useGetAllSpecialtiesQuery,
+} from '@/redux/api/specialties.Api';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import Image from 'next/image';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { toast } from 'sonner';
 
 const SpecialtiesPage = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const { data, isLoading } = useGetAllSpecialtiesQuery({});
+  const [deleteSpecialty] = useDeleteSpecialtyMutation();
 
-  const handleDelete = (id: string) => {
-    console.log(id);
+  const handleDelete = async (id: string) => {
+    try {
+      const res = await deleteSpecialty(id).unwrap();
+      if (res?.id) {
+        toast.success('Specialties deleted successfully!!');
+      }
+    } catch (error: any) {
+      console.log(error.message);
+    }
   };
 
   const columns: GridColDef[] = [
     {
       field: 'icon',
       headerName: 'Icon',
-      width: 300,
+      flex: 1,
       renderCell: ({ row }) => {
         return (
           <Box>
-            <Image src={row.icon} width={20} height={20} alt='icon' />
+            <Image src={row.icon} width={30} height={30} alt='icon' />
           </Box>
         );
       },
     },
-    { field: 'title', headerName: 'Title', width: 400 },
+    { field: 'title', headerName: 'Title', width: 400, flex: 1 },
     {
       field: 'action',
       headerName: 'Action',
-      width: 300,
+      flex: 1,
       renderCell: ({ row }) => {
         return (
           <IconButton onClick={() => handleDelete(row.id)} aria-label='delete'>
