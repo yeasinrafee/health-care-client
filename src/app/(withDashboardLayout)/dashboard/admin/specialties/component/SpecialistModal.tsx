@@ -23,7 +23,7 @@ const SpecialistModal = ({ open, setOpen }: TProps) => {
             <HCInput name='title' label='Title' />
           </Grid>
           <Grid item md={6}>
-            <HCFileUploader />
+            <HCFileUploader name='file' label='Upload File' />
           </Grid>
         </Grid>
         <Button sx={{ mt: 1 }} type='submit'>
