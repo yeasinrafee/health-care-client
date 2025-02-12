@@ -1,8 +1,10 @@
+import { Box, Button, Stack, TextField } from '@mui/material';
+
 const Schedules = () => {
   return (
-    <div>
-      <h1>Schedules Page</h1>
-    </div>
+    <>
+      <h1>Schedules</h1>
+    </>
   );
 };
 
