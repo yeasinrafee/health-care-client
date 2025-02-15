@@ -42,7 +42,8 @@ instance.interceptors.response.use(
 
     const config = error.config;
 
-    if (error?.response?.status === 5000) {
+    if (error?.response?.status === 5000 && !config.sent) {
+      config.sent = true;
       const response = await getNewAccessToken();
       const accessToken = response?.data?.accessToken;
       config.headers['Authorization'] = accessToken;
