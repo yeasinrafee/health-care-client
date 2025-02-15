@@ -9,7 +9,9 @@ import {
 } from '@/redux/api/doctor.Api';
 import { Gender } from '@/types';
 import { Box, Button, Grid, Typography } from '@mui/material';
+import { useRouter } from 'next/navigation';
 import { FieldValues } from 'react-hook-form';
+import { toast } from 'sonner';
 
 type TParams = {
   params: {
@@ -18,6 +20,7 @@ type TParams = {
 };
 
 const DoctorUpdatePage = ({ params }: TParams) => {
+  const router = useRouter();
   const id = params?.doctorId;
   const { data, isLoading } = useGetDoctorQuery(id);
   const [updateDoctor] = useUpdateDoctorMutation();
@@ -26,7 +29,11 @@ const DoctorUpdatePage = ({ params }: TParams) => {
     values.apointmentFee = Number(values.doctor.apointmentFee);
     values.id = id;
     try {
-      const res = await updateDoctor({ id });
+      const res = await updateDoctor({ id: values.id, body: values }).unwrap();
+      if (res?.id) {
+        toast.success('Doctor updated Successfully!');
+        router.push('/dashboard/admin/doctors');
+      }
     } catch (err: any) {
       console.log(err);
     }
@@ -49,99 +56,108 @@ const DoctorUpdatePage = ({ params }: TParams) => {
       <Typography component='h5' variant='h5'>
         Doctor update
       </Typography>
-      <HCForm onSubmit={onSubmit} defaultValues={defaultValues}>
-        <Grid container spacing={2} sx={{ my: 5 }}>
-          <Grid item xs={12} sm={12} md={4}>
-            <HCInput name='name' label='Name' fullWidth={true} sx={{ mb: 2 }} />
-          </Grid>
-          <Grid item xs={12} sm={12} md={4}>
-            <HCInput
-              name='email'
-              label='Email'
-              fullWidth={true}
-              sx={{ mb: 2 }}
-            />
-          </Grid>
+      {isLoading ? (
+        'Loading...!!!'
+      ) : (
+        <HCForm onSubmit={onSubmit} defaultValues={data && defaultValues}>
+          <Grid container spacing={2} sx={{ my: 5 }}>
+            <Grid item xs={12} sm={12} md={4}>
+              <HCInput
+                name='name'
+                label='Name'
+                fullWidth={true}
+                sx={{ mb: 2 }}
+              />
+            </Grid>
+            <Grid item xs={12} sm={12} md={4}>
+              <HCInput
+                name='email'
+                label='Email'
+                fullWidth={true}
+                sx={{ mb: 2 }}
+              />
+            </Grid>
 
-          <Grid item xs={12} sm={12} md={4}>
-            <HCInput
-              name='contactNumber'
-              label='Contact Number'
-              fullWidth={true}
-              sx={{ mb: 2 }}
-            />
-          </Grid>
-          <Grid item xs={12} sm={12} md={4}>
-            <HCInput
-              name='address'
-              label='Address'
-              fullWidth={true}
-              sx={{ mb: 2 }}
-            />
-          </Grid>
-          <Grid item xs={12} sm={12} md={4}>
-            <HCInput
-              name='registrationNumber'
-              label='Registration Number'
-              fullWidth={true}
-              sx={{ mb: 2 }}
-            />
-          </Grid>
+            <Grid item xs={12} sm={12} md={4}>
+              <HCInput
+                name='contactNumber'
+                label='Contact Number'
+                fullWidth={true}
+                sx={{ mb: 2 }}
+              />
+            </Grid>
+            <Grid item xs={12} sm={12} md={4}>
+              <HCInput
+                name='address'
+                label='Address'
+                fullWidth={true}
+                sx={{ mb: 2 }}
+              />
+            </Grid>
+            <Grid item xs={12} sm={12} md={4}>
+              <HCInput
+                name='registrationNumber'
+                label='Registration Number'
+                fullWidth={true}
+                sx={{ mb: 2 }}
+              />
+            </Grid>
 
-          <Grid item xs={12} sm={12} md={4}>
-            <HCInput
-              name='experience'
-              type='number'
-              label='Experience'
-              fullWidth={true}
-              sx={{ mb: 2 }}
-            />
-          </Grid>
-          <Grid item xs={12} sm={12} md={4}>
-            <HCSelectField
-              items={Gender}
-              name='gender'
-              label='Gender'
-              sx={{ mb: 2 }}
-            />
-          </Grid>
-          <Grid item xs={12} sm={12} md={4}>
-            <HCInput
-              name='apointmentFee'
-              type='number'
-              label='Appointment Fee'
-              fullWidth={true}
-              sx={{ mb: 2 }}
-            />
-          </Grid>
+            <Grid item xs={12} sm={12} md={4}>
+              <HCInput
+                name='experience'
+                type='number'
+                label='Experience'
+                fullWidth={true}
+                sx={{ mb: 2 }}
+              />
+            </Grid>
+            <Grid item xs={12} sm={12} md={4}>
+              <HCSelectField
+                items={Gender}
+                name='gender'
+                label='Gender'
+                sx={{ mb: 2 }}
+              />
+            </Grid>
+            <Grid item xs={12} sm={12} md={4}>
+              <HCInput
+                name='apointmentFee'
+                type='number'
+                label='Appointment Fee'
+                fullWidth={true}
+                sx={{ mb: 2 }}
+              />
+            </Grid>
 
-          <Grid item xs={12} sm={12} md={4}>
-            <HCInput
-              name='qualification'
-              label='Qualification'
-              fullWidth={true}
-              sx={{ mb: 2 }}
-            />
+            <Grid item xs={12} sm={12} md={4}>
+              <HCInput
+                name='qualification'
+                label='Qualification'
+                fullWidth={true}
+                sx={{ mb: 2 }}
+              />
+            </Grid>
+            <Grid item xs={12} sm={12} md={4}>
+              <HCInput
+                name='currentWorkingPlace'
+                label='Current Working Place'
+                fullWidth={true}
+                sx={{ mb: 2 }}
+              />
+            </Grid>
+            <Grid item xs={12} sm={12} md={4}>
+              <HCInput
+                name='designation'
+                label='Designation'
+                fullWidth={true}
+                sx={{ mb: 2 }}
+              />
+            </Grid>
           </Grid>
-          <Grid item xs={12} sm={12} md={4}>
-            <HCInput
-              name='currentWorkingPlace'
-              label='Current Working Place'
-              fullWidth={true}
-              sx={{ mb: 2 }}
-            />
-          </Grid>
-          <Grid item xs={12} sm={12} md={4}>
-            <HCInput
-              name='designation'
-              label='Designation'
-              fullWidth={true}
-              sx={{ mb: 2 }}
-            />
-          </Grid>
-        </Grid>
-        <Button type='submit'>Update</Button>
-      </HCForm>
+          <Button type='submit'>Update</Button>
+        </HCForm>
+      )}
     </Box>
   );
 };
