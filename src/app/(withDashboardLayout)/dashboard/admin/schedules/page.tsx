@@ -2,7 +2,6 @@
 import { Box, Button, IconButton, Stack, TextField } from '@mui/material';
 import { useEffect, useState } from 'react';
 import ScheduleModal from './components/ScheduleModal';
-import { useGetAllSpecialtiesQuery } from '@/redux/api/specialties.Api';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { toast } from 'sonner';
