@@ -2,10 +2,13 @@ import HCDatePicker from '@/components/Forms/HCDatePicker';
 import HCForm from '@/components/Forms/HCForm';
 import HCTimePicker from '@/components/Forms/HCTimePicker';
 import HCModal from '@/components/shared/HCModal/HCModal';
-import { dateFormatter } from '@/utils/DateFormatter';
+import { useCreateScheduleMutation } from '@/redux/api/schedule.Api';
+import { dateFormatter } from '@/utils/dateFormatter';
+import { timeFormatter } from '@/utils/timeFormatter';
 import { Button, Grid } from '@mui/material';
 import React from 'react';
 import { FieldValues } from 'react-hook-form';
+import { toast } from 'sonner';
 
 type TProps = {
   open: boolean;
@@ -13,13 +16,22 @@ type TProps = {
 };
 
 const ScheduleModal = ({ open, setOpen }: TProps) => {
+  const [createSchedule] = useCreateScheduleMutation();
   const handleFormSubmit = async (values: FieldValues) => {
     // console.log(dateFormatter(values.startDate));
 
     values.startDate = dateFormatter(values.startDate);
     values.endDate = dateFormatter(values.endDate);
+    values.startTime = timeFormatter(values.startTime);
+    values.endTime = timeFormatter(values.endTime);
+    console.log(values);
 
     try {
+      const res = await createSchedule(values);
+      if (res?.data?.length) {
+        toast.success('Schedules Created successfully!!');
+        setOpen(false);
+      }
     } catch (err: any) {
       console.log(err);
     }
