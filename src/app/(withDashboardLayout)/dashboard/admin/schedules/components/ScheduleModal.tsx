@@ -18,13 +18,10 @@ type TProps = {
 const ScheduleModal = ({ open, setOpen }: TProps) => {
   const [createSchedule] = useCreateScheduleMutation();
   const handleFormSubmit = async (values: FieldValues) => {
-    // console.log(dateFormatter(values.startDate));
-
     values.startDate = dateFormatter(values.startDate);
     values.endDate = dateFormatter(values.endDate);
     values.startTime = timeFormatter(values.startTime);
     values.endTime = timeFormatter(values.endTime);
-    console.log(values);
 
     try {
       const res = await createSchedule(values);
